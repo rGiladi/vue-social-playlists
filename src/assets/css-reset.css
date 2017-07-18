@@ -1,0 +1,33 @@
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  p, ul {
+    margin: 0;
+  }
+
+  h2 {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  input {
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 1.2em;
+    padding: .8em;
+    color: rgba(0,0,0,.8);
+  }
+
+  button {
+    outline: none;
+    border: none;
+    font-family: inherit;
+    font-size: 1.2em;
+    cursor: pointer;
+    background: #fff;
+    color: #48435C;
+    padding: .8em;
+  }
