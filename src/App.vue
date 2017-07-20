@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <router-view name="ano-navigation"></router-view>
     <router-view></router-view>
   </div>
 </template>
@@ -31,5 +32,4 @@ export default {
     height: 100%;
     font-family: 'Hammersmith One', sans-serif;
   }
-
 </style>

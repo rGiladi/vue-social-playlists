@@ -4,14 +4,17 @@
       <li><router-link to="/">Home</router-link></li>
       <li><span class="divider"></span></li>
       <li><router-link to="/login">Login</router-link></li>
-      <li><router-link to="/new-account">Sign Up</router-link></li>
+      <li><router-link to="/sign-up">Sign Up</router-link></li>
     </ul>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ano-navigation'
+  name: 'ano-navigation',
+  beforeDestroy () {
+    console.log('destroyed')
+  }
 }
 </script>
 
@@ -23,6 +26,7 @@ export default {
   background: #fff;
   margin: 0;
   height: 60px;
+  z-index: 1;
 }
 
 .ano-nav>ul>li {

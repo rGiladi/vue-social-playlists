@@ -10,7 +10,7 @@ Vue.use(VueAxios, axios)
 
 var sinon = require('sinon')
 
-describe('getSongObjectFromYoutube', () => {
+describe('ExamplePlaylistCreator Component', () => {
   var vm
   before(() => {
     const Constructor = Vue.extend(ExamplePlaylistCreator)

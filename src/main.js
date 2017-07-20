@@ -6,7 +6,9 @@ import router from './router'
 import VueYouTubeEmbed from 'vue-youtube-embed'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import Vuelidate from 'vuelidate'
 
+Vue.use(Vuelidate)
 Vue.use(VueYouTubeEmbed)
 Vue.use(VueAxios, axios)
 

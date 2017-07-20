@@ -26,7 +26,7 @@
       </div>
       <div class="s3" v-show="currentStep === 3">
         <h1> Create an account </h1>
-        <router-link to="/new-account" tag="button" class="btn-newAccount">Click to create a new account!</router-link>
+        <router-link to="/sign-up" tag="button" class="btn-newAccount">Click to create a new account!</router-link>
         <span> (Your playlist will be created and saved automatically) </span>
       </div>
     </div>
@@ -113,11 +113,15 @@ export default {
 
   .example-playlist-creator {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    height: calc(100% - 95px);
+    height: calc(100% - 60px);
     margin: auto;
     text-align: center;
     color: #fff;
+    overflow-y: auto;
   }
 
   .example-playlist-creator h1 {
@@ -125,11 +129,8 @@ export default {
   }
 
   .steps {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
     width: 100%;
+    max-height: calc(100% - 60px);
   }
 
   .steps input {
