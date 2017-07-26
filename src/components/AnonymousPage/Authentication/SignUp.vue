@@ -1,6 +1,6 @@
 <template>
-  <div class="sign-up">
-    <div class="sign-up-form">
+  <div class="authentication">
+    <div class="authentication-form">
       <h1> Sign Up </h1>
       <ul>
         <li v-for="error in errors" v-text="error"/>
@@ -10,7 +10,7 @@
         <input type="text" placeholder="Enter Email" v-model.trim="userEmail" />
         <input type="password" placeholder="Enter password" v-model.trim="userPassword" />
         <input type="password" placeholder="Enter password again" v-model.trim="passwordMatch" />
-        <button class="signup-btn" @click.prevent="signUp">Sign Up</button>
+        <button @click.prevent="signUp">Sign Up</button>
       </form>
     </div>
   </div>
@@ -34,9 +34,9 @@ export default {
     signUp () {
       if (this.validateFields()) {
         let vm = this
-        vm.axios({
+        return vm.axios({
           method: 'post',
-          url: '/api/sign-up',
+          url: '/api/auth/sign-up',
           data: {
             username: vm.userName,
             email: vm.userEmail,
@@ -44,9 +44,14 @@ export default {
             passwordMatch: vm.passwordMatch
           }
         }).then(res => {
-          console.log(res)
-        }).catch(err => {
-          console.log(err)
+          localStorage.setItem('jwtToken', res.data)
+          vm.$router.push('/' + vm.userName) // We will create user's routes later...
+        }).catch((err) => {
+          if (err.response.status === 409) {
+            vm.errors.push('Username or email are already in use')
+          } else {
+            alert('problem occured, please refresh and try again')
+          }
         })
       }
     },
@@ -94,42 +99,6 @@ export default {
 </script>
 
 <style>
-
-.sign-up {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: calc(100% - 60px);
-  width: 100%;
-  overflow-y: auto;
-}
-
-.sign-up-form {
-  width: 100%;
-  max-height: calc(100% - 60px);
-}
-
-.sign-up h1 {
-  margin-top: 0;
-  color: #fff;
-}
-
-.sign-up input {
-  display: block;
-  width: 45%;
-  margin: auto;
-  margin-bottom: 15px;
-  font-size: 1.4em;
-}
-
-.sign-up ul {
-  margin-bottom: 21px;
-}
-
-.signup-btn {
-  margin-bottom: 8px;
-}
+@import url('./auth.css');
 
 </style>

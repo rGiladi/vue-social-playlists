@@ -11,7 +11,7 @@ describe('SignUp Component', () => {
     const Constructor = Vue.extend(SignUp)
     vm = new Constructor({ router }).$mount()
   })
-  describe('validateFields Method', () => {
+  describe('ValidateFields Method', () => {
     it('should push 4 errors and return false', () => {
       expect(vm.validateFields()).to.be.false
       expect(vm.errors.length).to.equal(4)
