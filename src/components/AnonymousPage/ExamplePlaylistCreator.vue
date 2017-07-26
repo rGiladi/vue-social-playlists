@@ -149,10 +149,9 @@ export default {
 
   .yt-video-details {
     position: absolute;
-    top: -42px;
     left: 50%;
     transform: translate(-50%);
-    width: calc(45% + 1.6em);
+    width: calc(45% + 1.5em);
     height: 124px;
     background: rgba(0, 0, 0, 0.5);
     color: #fff;
