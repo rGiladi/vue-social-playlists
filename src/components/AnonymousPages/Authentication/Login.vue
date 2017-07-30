@@ -5,7 +5,7 @@
       <form>
         <input type="text" placeholder="Enter username" v-model.trim="userName" />
         <input type="password" placeholder="Enter password" v-model.trim="userPassword" />
-        <button @click.prevent="signUp">Sign Up</button>
+        <button @click.prevent="Login">Sign Up</button>
       </form>
     </div>
   </div>
@@ -32,7 +32,7 @@ export default {
         }
       }).then(res => {
         localStorage.setItem('jwtToken', res.data)
-        vm.$router.push('/' + vm.userName) // We will create user's routes later...
+        vm.$router.push(vm.userName + '/playlists') // We will create user's routes later...
       }).catch(() => {
         alert('problem occured, please refresh and try again')
       })

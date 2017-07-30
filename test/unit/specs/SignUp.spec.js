@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import router from '@/router'
-import SignUp from '@/components/AnonymousPage/Authentication/SignUp'
+import SignUp from '@/components/AnonymousPages/Authentication/SignUp'
 import Vuelidate from 'vuelidate'
 
 Vue.use(Vuelidate)

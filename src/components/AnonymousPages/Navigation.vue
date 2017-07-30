@@ -11,10 +11,7 @@
 
 <script>
 export default {
-  name: 'ano-navigation',
-  beforeDestroy () {
-    console.log('destroyed')
-  }
+  name: 'ano-navigation'
 }
 </script>
 

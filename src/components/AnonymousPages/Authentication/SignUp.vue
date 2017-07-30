@@ -34,6 +34,7 @@ export default {
     signUp () {
       if (this.validateFields()) {
         let vm = this
+        let playlist = sessionStorage.getItem('epc-values')
         return vm.axios({
           method: 'post',
           url: '/api/auth/sign-up',
@@ -41,7 +42,8 @@ export default {
             username: vm.userName,
             email: vm.userEmail,
             password: vm.userPassword,
-            passwordMatch: vm.passwordMatch
+            passwordMatch: vm.passwordMatch,
+            playlists: playlist ? [JSON.parse(playlist)] : '[]'
           }
         }).then(res => {
           localStorage.setItem('jwtToken', res.data)

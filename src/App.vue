@@ -20,9 +20,6 @@ export default {
   html, body {
     height: 100%;
     margin: 0;
-    background: #DA22FF no-repeat;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #9733EE, #DA22FF) no-repeat; 
-    background: linear-gradient(to bottom, #9733EE, #DA22FF) no-repeat;
   }
 
   #app {
@@ -31,5 +28,6 @@ export default {
     background: linear-gradient(to bottom, #9733EE, #DA22FF) no-repeat;
     height: 100%;
     font-family: 'Hammersmith One', sans-serif;
+    overflow: auto;
   }
 </style>

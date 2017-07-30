@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Navigation from '@/components/AnonymousPage/Navigation'
-import ExamplePlaylistCreator from '@/components/AnonymousPage/ExamplePlaylistCreator'
-import SignUp from '@/components/AnonymousPage/Authentication/SignUp'
-import Login from '@/components/AnonymousPage/Authentication/Login'
+import Navigation from '@/components/AnonymousPages/Navigation'
+import ExamplePlaylistCreator from '@/components/AnonymousPages/ExamplePlaylistCreator'
+import SignUp from '@/components/AnonymousPages/Authentication/SignUp'
+import Login from '@/components/AnonymousPages/Authentication/Login'
+import PlaylistsList from '@/components/UserPages/PlaylistsList/PlaylistsList'
+import Playlist from '@/components/UserPages/Playlist/Playlist'
 
 Vue.use(Router)
 
@@ -32,6 +34,15 @@ export default new Router({
         default: Login,
         'ano-navigation': Navigation
       }
+    }, {
+      path: '/:username/playlists',
+      name: 'PlaylistsList',
+      component: PlaylistsList
+    },
+    {
+      path: '/:username/playlists/:playlist_id',
+      name: 'Playlist',
+      component: Playlist
     }
   ],
   mode: 'history'

@@ -80,13 +80,28 @@ export default {
         }).then(res => {
           vm.ytSongObject.title = res.data.items[0].snippet.title
           vm.ytSongObject.thumbnail = res.data.items[0].snippet.thumbnails.medium.url
-          vm.ytSongObject.time = res.data.items[0].contentDetails.duration
+          vm.ytSongObject.time = this.convertYoutubeTime(res.data.items[0].contentDetails.duration)
         }).catch(() => {
           alert('Something went wrong, please refresh and try again')
         })
       } else {
         alert('Not a valid url!')
       }
+    },
+    convertYoutubeTime (time) {
+      let matches = time.match(/[0-9]+[HMS]/g)
+      return matches.reduce(function (acc, val) {
+        switch (val[val.length - 1]) {
+          case 'H':
+            return acc + parseInt(val) + ':'
+          case 'M':
+            return acc + parseInt(val) + ':'
+          case 'S':
+            return acc + parseInt(val)
+          default:
+            return acc
+        }
+      }, '')
     }
   },
   watch: {
@@ -100,9 +115,9 @@ export default {
   },
   beforeDestroy () {
     sessionStorage.setItem('epc-values', JSON.stringify({
-      pTitle: this.pTitle,
-      pPassword: this.pPassword,
-      playlistAddedSongs: this.playlistAddedSongs
+      title: this.pTitle,
+      password: this.pPassword,
+      songs: this.playlistAddedSongs
     })
     )
   }

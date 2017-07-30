@@ -3,7 +3,7 @@ import router from '@/router'
 import VueYouTubeEmbed from 'vue-youtube-embed'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import ExamplePlaylistCreator from '@/components/AnonymousPage/ExamplePlaylistCreator'
+import ExamplePlaylistCreator from '@/components/AnonymousPages/ExamplePlaylistCreator'
 
 Vue.use(VueYouTubeEmbed)
 Vue.use(VueAxios, axios)
@@ -38,7 +38,7 @@ describe('ExamplePlaylistCreator Component', () => {
       vm.pTitle = 'test-title'
       vm.$destroy()
       let objFromStorage = JSON.parse(sessionStorage.getItem('epc-values'))
-      expect(objFromStorage['pTitle']).to.equal('test-title')
+      expect(objFromStorage['title']).to.equal('test-title')
     })
   })
 })
