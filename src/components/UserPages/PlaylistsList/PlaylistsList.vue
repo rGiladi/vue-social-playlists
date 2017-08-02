@@ -6,8 +6,6 @@
         <img :src="playlist.songs[0].thumbnail" v-if="playlist.songs[0]" />
         <div v-text="playlist.title" class="p-title"></div>
         <span v-text="playlist.songs.length + ' Videos'" class="p-size"></span>
-        <br />
-        <i class="fa fa-trash delete-playlist-btn" aria-hidden="true"></i>
       </div>
     </div>
     <p v-if="!playlists" class="nothing-here"> Nothing here yet.. </p>
@@ -25,8 +23,9 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.axios.get('/api/' + to.params.username + '/playlists', {
-      }).then(res => {
+      let username = to.params.username
+      vm.axios.get('/api/playlists/' + username)
+      .then(res => {
         vm.playlists = res.data
         vm.owner = to.params.username
       }).catch(() => {
@@ -47,12 +46,15 @@ export default {
 <style>
 
   .user-playlists {
-    padding: 45px;
+    padding: 30px;
+    position: fixed;
+    top: 0;bottom: 0;
+    overflow: auto;
   }
 
   .user-playlists h1 {
     font-size: 2.3em;
-    margin: 0 0 10px 0;
+    margin: 0 0 15px 0;
   }
 
   .playlists-wrapper {
@@ -61,10 +63,13 @@ export default {
     flex-flow: row wrap;
   }
 
-  .user-playlists .playlist-box {
-    width: 20%;
+  .playlist-box {
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    width: 22%;
     padding: 10px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     color: #ebebeb;
     font-weight: bold;
     background: rgba(0,0,0,0.1);
@@ -78,51 +83,16 @@ export default {
   }
 
   .playlist-box .p-title {
-    font-size: 1.4em;
+    font-size: 1.2em;
     margin: 5px 0;
   }
 
   .playlist-box .p-size {
-    font-size: 1.2em;
+    position: absolute;
+    bottom: 10px;
+    font-size: 1em;
     opacity: .8;
   }
-
-  /* Add Playlist */
-
-  .add-playlist-details {
-    position: absolute;
-    bottom: 3.2em;
-    right: 20px;
-    width: 360px;
-  }
-
-  .add-playlist-details>input {
-    display: block;
-    width: 100%;
-    padding: 0.4em;
-    margin-bottom: 10px;
-  }
-  
-  .add-playlist-btn {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    box-shadow: none;
-    height: 47.41px;
-    width: calc(100% + 1em);
-    background: #9733EE;
-    line-height: 47.41px;
-    color: #fff;
-    transition: color 0.2s;
-  }
-
-  .add-playlist-btn:hover {
-    color: #000;
-  }
-  
-  .fa-check {
-    font-size: 2.4em;
-  } 
 
   .nothing-here {
     display: block;

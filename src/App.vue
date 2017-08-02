@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <router-view name="ano-navigation"></router-view>
-    <router-view></router-view>
+    <keep-alive include="PlaylistsList, playlist">
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -28,6 +30,5 @@ export default {
     background: linear-gradient(to bottom, #9733EE, #DA22FF) no-repeat;
     height: 100%;
     font-family: 'Hammersmith One', sans-serif;
-    overflow: auto;
   }
 </style>

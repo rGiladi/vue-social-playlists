@@ -1,6 +1,6 @@
 <template>
   <div id="playlist-list">
-    <div class="song-item" v-for="song in songs" @click="playSong(song)">
+    <div class="song-item" v-for="song in songs" @click="playSong(song)" :class="currentSong === song ? 'active' : ''">
       <i class="fa fa-times delete-btn" aria-hidden="true"></i>
       <div class="song-title" v-text="song.title"></div>
       <span class="song-time" v-text="song.time"></span>
@@ -11,9 +11,9 @@
 <script>
 export default {
   name: 'songs-list',
-  props: ['songs'],
+  props: ['songs', 'currentSong'],
   methods: {
-    playSong (song) {
+    playSong (song, e) {
       this.$emit('changeSong', song)
     }
   }
@@ -22,12 +22,11 @@ export default {
 
 <style>
 
-#playlist-list {
-    position: relative;
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+  #playlist-list {
     color: #fff;
+    display: flex;
+    flex-flow: column;
+    overflow: auto;
   }
 
   .song-item {

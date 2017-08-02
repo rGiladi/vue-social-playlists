@@ -1,24 +1,33 @@
 <template>
   <div class="playlist-page">
-    <div class="playlist-details-and-list">
-      <h1 v-text="title"></h1>
-      <h2 v-text="author"></h2>
-      <songs-list :songs="songsList" @changeSong="changeSong"></songs-list>
+    <div class="playlist-details-and-songs-list">
+      <div class="details">
+        <h1 v-text="title"></h1>
+        <router-link :to="'/' + author + '/playlists'" tag="div" class="author-wrapper">
+        <p v-text="author"></p>
+        <i class="material-icons home">home</i>
+        </router-link>
+      </div>
+      <!-- <tools></tools> -->
+      <songs-list :songs="songsList" :current-song="currentSong" @changeSong="changeSong"></songs-list>
     </div>
-    <div class="player">
-      <music-player :current-song="currentSong"></music-player>
+    <div class="player-and-related-list">
+      <youtube :video-id="currentSong.vidId" :player-width="400" :player-height="250"></youtube>
+      <related-songs-list :current-song="currentSong"></related-songs-list>
     </div>
   </div>
 </template>
 
 <script>
 import SongsList from './SongsList'
-import MusicPlayer from './MusicPlayer'
+import RelatedSongsList from './RelatedSongsList'
+import Tools from './Tools'
 export default {
   name: 'playlist',
   components: {
     'songs-list': SongsList,
-    'music-player': MusicPlayer
+    'related-songs-list': RelatedSongsList,
+    'tools': Tools
   },
   data () {
     return {
@@ -33,7 +42,9 @@ export default {
     if (playlist && 1 === 3) {
       this.fillPlaylistData(JSON.parse(playlist))
     } else {
-      this.axios.get('/api' + this.$route.path)
+      let username = this.$route.params.username
+      let pid = this.$route.params.playlist_id
+      this.axios.get('/api/playlists/' + username + '/' + pid)
       .then(res => {
         this.fillPlaylistData(res.data)
       }).catch(err => {
@@ -58,23 +69,49 @@ export default {
 <style>
 
   .playlist-page {
-    padding: 15px;
+    padding: 30px 60px;
     color: #fff;
     font-weight: bold;
+    display: flex;
+    position: fixed;
+    top: 0;
+    bottom: 0;
   }
 
-  .playlist-details-and-list {
-    margin: auto;
-    width: 50%;
-    float: left;
+  .playlist-details-and-songs-list {
+    display: flex;
+    flex-flow: column;
+    margin-right: 15px;
   }
 
-  .player {
+  .player-and-related-list {
     width: 400px;
-    float: left;
+    display: flex;
+    flex-flow: column;
+    flex: 1;  
   }
   .playlist-page h1 {
     margin: 0;
-    font-size: 2.7em;
+    font-size: 2.4em;
   }
+
+  .author-wrapper {
+    display: flex;
+    cursor: pointer;
+  }
+
+  .author-wrapper p {
+    font-size: 1.8em;
+    margin-right: 5px;
+    margin-bottom: 15px;
+    color: #000;
+  }
+
+  .material-icons.home {
+    position: relative;
+    bottom: 1px;
+    font-size: 2em;
+    color: #000;
+  }
+
 </style>
