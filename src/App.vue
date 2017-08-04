@@ -30,5 +30,7 @@ export default {
     background: linear-gradient(to bottom, #9733EE, #DA22FF) no-repeat;
     height: 100%;
     font-family: 'Hammersmith One', sans-serif;
+    display: flex;
+    flex-flow: column;
   }
 </style>

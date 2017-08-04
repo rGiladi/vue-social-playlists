@@ -9,7 +9,7 @@ import Playlist from '@/components/UserPages/Playlist/Playlist'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -47,3 +47,22 @@ export default new Router({
   ],
   mode: 'history'
 })
+
+const anonymousRoutes = ['anonymous-home-page', 'login', 'sign-up']
+
+router.beforeEach((to, from, next) => {
+  if (anonymousRoutes.indexOf(to.name) !== -1) {
+    let user = localStorage.getItem('user')
+    if (user) {
+      next({
+        path: '/' + user + '/playlists'
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
+
+export default router

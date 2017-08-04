@@ -4,7 +4,7 @@
       <h1> Login </h1>
       <form>
         <input type="text" placeholder="Enter username" v-model.trim="userName" />
-        <input type="password" placeholder="Enter password" v-model.trim="userPassword" />
+        <input type="password" placeholder="Enter password" v-model="userPassword" />
         <button @click.prevent="Login">Sign Up</button>
       </form>
     </div>
@@ -31,10 +31,11 @@ export default {
           password: vm.userPassword
         }
       }).then(res => {
-        localStorage.setItem('jwtToken', res.data)
+        localStorage.setItem('user', res.data.username)
+        localStorage.setItem('jwtToken', res.data.jwt)
         vm.$router.push(vm.userName + '/playlists') // We will create user's routes later...
       }).catch(() => {
-        alert('problem occured, please refresh and try again')
+        alert('Incorrect username/password')
       })
     }
   }

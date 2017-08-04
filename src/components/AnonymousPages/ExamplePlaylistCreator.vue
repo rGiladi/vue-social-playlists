@@ -115,9 +115,9 @@ export default {
   },
   beforeDestroy () {
     sessionStorage.setItem('epc-values', JSON.stringify({
-      title: this.pTitle,
-      password: this.pPassword,
-      songs: this.playlistAddedSongs
+      title: this.pTitle || 'Default Playlist',
+      password: this.pPassword || '',
+      songs: this.playlistAddedSongs || []
     })
     )
   }
@@ -204,7 +204,7 @@ export default {
     margin-bottom: 15px;
   }
 
-  .material-icons {
+  .example-playlist-creator .material-icons {
     font-size: 32px;
     cursor: pointer;
   }

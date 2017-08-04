@@ -30,10 +30,7 @@ module.exports = function (config) {
       ]
     },
     proxies: {
-      '/api': {
-        target: 'http://localhost:45601',
-        changeOrigin: true
-      }
+      '/api': 'http://localhost:45601/api/'
     }
   })
 }

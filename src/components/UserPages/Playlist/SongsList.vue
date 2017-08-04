@@ -1,7 +1,6 @@
 <template>
   <div id="playlist-list">
-    <div class="song-item" v-for="song in songs" @click="playSong(song)" :class="currentSong === song ? 'active' : ''">
-      <i class="fa fa-times delete-btn" aria-hidden="true"></i>
+    <div class="song-item" v-for="song, $indx in songs" @click="playSong(song, $indx)" :class="currentSong === song ? 'active' : ''">
       <div class="song-title" v-text="song.title"></div>
       <span class="song-time" v-text="song.time"></span>
     </div>
@@ -13,8 +12,11 @@ export default {
   name: 'songs-list',
   props: ['songs', 'currentSong'],
   methods: {
-    playSong (song, e) {
-      this.$emit('changeSong', song)
+    playSong (song, indx) {
+      this.$emit('changeSong', {
+        song: song,
+        indx: indx
+      })
     }
   }
 }
@@ -25,15 +27,18 @@ export default {
   #playlist-list {
     color: #fff;
     display: flex;
+    flex: 1;
     flex-flow: column;
     overflow: auto;
   }
 
   .song-item {
+    display: flex;
+    flex: none;
+    justify-content: space-between;
     width: 90%;
     height: 22px;
     line-height: 22px;
-    font-weight: bold;
     background-color: rgba(0,0,0,0.4);
     margin-bottom: 8px;
     border-radius: 20px;
@@ -51,15 +56,9 @@ export default {
   }
 
   .song-title {
-    display: inline-block;
     max-width: 80%;
     white-space: nowrap;
     text-overflow: ellipsis;
-    float: left;
     overflow: hidden;
-  }
-
-  .song-time {
-    float: right;
   }
 </style>

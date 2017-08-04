@@ -8,8 +8,8 @@
       <form>
         <input type="text" placeholder="Enter username" v-model.trim="userName" />
         <input type="text" placeholder="Enter Email" v-model.trim="userEmail" />
-        <input type="password" placeholder="Enter password" v-model.trim="userPassword" />
-        <input type="password" placeholder="Enter password again" v-model.trim="passwordMatch" />
+        <input type="password" placeholder="Enter password" v-model="userPassword" />
+        <input type="password" placeholder="Enter password again" v-model="passwordMatch" />
         <button @click.prevent="signUp">Sign Up</button>
       </form>
     </div>
@@ -35,19 +35,16 @@ export default {
       if (this.validateFields()) {
         let vm = this
         let playlist = sessionStorage.getItem('epc-values')
-        return vm.axios({
-          method: 'post',
-          url: '/api/auth/sign-up',
-          data: {
-            username: vm.userName,
-            email: vm.userEmail,
-            password: vm.userPassword,
-            passwordMatch: vm.passwordMatch,
-            playlists: playlist ? [JSON.parse(playlist)] : '[]'
-          }
+        vm.axios.post('/api/auth/sign-up', {
+          username: vm.userName,
+          email: vm.userEmail,
+          password: vm.userPassword,
+          passwordMatch: vm.passwordMatch,
+          playlists: playlist ? [JSON.parse(playlist)] : []
         }).then(res => {
-          localStorage.setItem('jwtToken', res.data)
-          vm.$router.push('/' + vm.userName) // We will create user's routes later...
+          localStorage.setItem('user', res.data.username)
+          localStorage.setItem('jwtToken', res.data.jwt)
+          vm.$router.push('/' + vm.userName + '/playlists')
         }).catch((err) => {
           if (err.response.status === 409) {
             vm.errors.push('Username or email are already in use')

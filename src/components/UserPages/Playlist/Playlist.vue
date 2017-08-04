@@ -1,66 +1,73 @@
 <template>
   <div class="playlist-page">
-    <div class="playlist-details-and-songs-list">
-      <div class="details">
-        <h1 v-text="title"></h1>
+    <div class="col left">
+      <div class="playlist-details">
         <router-link :to="'/' + author + '/playlists'" tag="div" class="author-wrapper">
-        <p v-text="author"></p>
-        <i class="material-icons home">home</i>
+          {{ author }}
+          <i class="material-icons home">home</i>
         </router-link>
+        <span class="title">{{ title }}</span>
       </div>
-      <!-- <tools></tools> -->
       <songs-list :songs="songsList" :current-song="currentSong" @changeSong="changeSong"></songs-list>
     </div>
-    <div class="player-and-related-list">
-      <youtube :video-id="currentSong.vidId" :player-width="400" :player-height="250"></youtube>
-      <related-songs-list :current-song="currentSong"></related-songs-list>
+    <div class="col right">
+      <music-player :songs="songsList" :current-song="currentSong" :current-song-indx="currentSongIndx" @nextSong="playNext"></music-player>
+      <related-songs-list :current-song="currentSong" @changeSong="changeSong"></related-songs-list>
     </div>
   </div>
 </template>
 
 <script>
+import MusicPlayer from './MusicPlayer'
 import SongsList from './SongsList'
 import RelatedSongsList from './RelatedSongsList'
-import Tools from './Tools'
+
 export default {
   name: 'playlist',
   components: {
+    'music-player': MusicPlayer,
     'songs-list': SongsList,
-    'related-songs-list': RelatedSongsList,
-    'tools': Tools
+    'related-songs-list': RelatedSongsList
   },
   data () {
     return {
       songsList: null,
-      currentSong: [],
+      currentSong: {},
+      currentSongIndx: 0,
       author: this.$route.params.username,
       title: null
     }
   },
-  created () {
-    let playlist = sessionStorage.getItem(this.$route.path)
-    if (playlist && 1 === 3) {
-      this.fillPlaylistData(JSON.parse(playlist))
-    } else {
-      let username = this.$route.params.username
-      let pid = this.$route.params.playlist_id
-      this.axios.get('/api/playlists/' + username + '/' + pid)
-      .then(res => {
-        this.fillPlaylistData(res.data)
-      }).catch(err => {
-        alert(err.response.data)
-        this.$router.push('/error')
-      })
-    }
+  mounted () {
+    this.loadPlaylist(sessionStorage.getItem(this.$route.path))
   },
   methods: {
+    changeSong (songObj) {
+      this.currentSongIndx = songObj.indx
+      this.currentSong = songObj.song
+    },
+    playNext (songObj) {
+      this.changeSong(songObj)
+    },
+    loadPlaylist (playlist) {
+      if (playlist) {
+        sessionStorage.removeItem(this.$route.path)
+        this.fillPlaylistData(JSON.parse(playlist))
+      } else {
+        let pid = this.$route.params.playlist_id
+        this.axios.get('/api/playlists/' + this.author + '/' + pid)
+        .then(res => {
+          this.fillPlaylistData(res.data)
+        }).catch(err => {
+          alert(err.response.data)
+          this.$router.push('/error')
+        })
+      }
+    },
     fillPlaylistData (playlist) {
       this.songsList = playlist.songs
       this.currentSong = playlist.songs[0]
       this.title = playlist.title
-    },
-    changeSong (song) {
-      this.currentSong = song
     }
   }
 }
@@ -69,49 +76,58 @@ export default {
 <style>
 
   .playlist-page {
-    padding: 30px 60px;
+    padding: 30px 30px;
     color: #fff;
     font-weight: bold;
     display: flex;
+    width: 100%;
     position: fixed;
     top: 0;
     bottom: 0;
+    overflow: auto;
   }
 
-  .playlist-details-and-songs-list {
+  .col {
     display: flex;
     flex-flow: column;
-    margin-right: 15px;
+    margin: 0 15px;
   }
 
-  .player-and-related-list {
-    width: 400px;
-    display: flex;
-    flex-flow: column;
-    flex: 1;  
+  .col.left {
+    flex: none;
+    width: calc(100% - 520px);
   }
-  .playlist-page h1 {
-    margin: 0;
-    font-size: 2.4em;
+
+  .col.right {
+    flex: none;
+  }
+
+  .playlist-details {
+    font-size: 1.8em;
+    margin-bottom: 10px;
   }
 
   .author-wrapper {
-    display: flex;
+    display: inline-flex;
+    margin-bottom: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
   }
 
-  .author-wrapper p {
-    font-size: 1.8em;
-    margin-right: 5px;
-    margin-bottom: 15px;
+  .playlist-details .title {
+    display: block;
+    font-size: 1.3em;
+  }
+
+  .author-wrapper:hover, .author-wrapper:hover .home {
     color: #000;
   }
 
   .material-icons.home {
     position: relative;
     bottom: 1px;
-    font-size: 2em;
-    color: #000;
+    left: 5px;
+    font-size: 1.15em;
   }
 
 </style>
