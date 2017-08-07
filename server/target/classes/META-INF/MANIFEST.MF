@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: spring-vue
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: roy
+Implementation-Vendor-Id: me
+Build-Jdk: 1.8.0_121
+Implementation-URL: http://projects.spring.io/spring-boot/social-playl
+ ists/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+

@@ -1,5 +1,7 @@
 package com.me.Authentication;
 
+import java.util.List;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -8,6 +10,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.me.Playlists.PlaylistModel;
 
 @Document(collection="Users")
 public class UserModel {
@@ -33,12 +37,15 @@ public class UserModel {
 	@Size(min = 6, max = 32)
 	private String passwordMatch;
 	
-	public UserModel(String _id, String username, String email, String password, String passwordMatch) {
+	private List<PlaylistModel> playlists;
+	
+	public UserModel(String _id, String username, String email, String password, String passwordMatch, List<PlaylistModel> playlists) {
 		this._id = _id;
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.passwordMatch = passwordMatch;
+		this.playlists = playlists;
 	}
 	
 	public UserModel() {}
@@ -81,6 +88,14 @@ public class UserModel {
 
 	public void setPasswordMatch(String passwordMatch) {
 		this.passwordMatch = passwordMatch;
+	}
+
+	public List<PlaylistModel> getPlaylists() {
+		return playlists;
+	}
+
+	public void setPlaylists(List<PlaylistModel> playlists) {
+		this.playlists = playlists;
 	}
 
 }

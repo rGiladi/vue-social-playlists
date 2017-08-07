@@ -1,13 +1,16 @@
-package com.me.Authentication;
+package com.me.Security;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -15,17 +18,23 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-@Component
+@Configuration
 public class JwtUtils {
 	
-	@Value("${jwt.api-key}")
-	String JWT_KEY;
+	private JwtSettingsProperties jwtProps;
+	private String KEY;
+	
+	@Autowired
+	public JwtUtils (JwtSettingsProperties jwtProps) {
+		this.jwtProps = jwtProps;
+		this.KEY = jwtProps.getKey();
+	}
 	
 	public String generateJWT(String issuer) {
 		
 		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
-	    byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(JWT_KEY);
+	    byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(KEY);
 	    Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 	    
 	    JwtBuilder builder = Jwts.builder().setId(UUID.randomUUID().toString()).
@@ -40,10 +49,21 @@ public class JwtUtils {
 	}
 	
 	public Claims parseJWT(String jwt) {
-		
 		Claims claims = Jwts.parser()
-				.setSigningKey(DatatypeConverter.parseBase64Binary(JWT_KEY))
+				.setSigningKey(DatatypeConverter.parseBase64Binary(KEY))
 				.parseClaimsJws(jwt).getBody();
 		return claims;
+	}
+	
+	public HashMap<String, String> generateResponseObject(String username) {
+		HashMap<String, String> obj = new HashMap<String, String>();
+		obj.put("jwt", generateJWT(username));
+		obj.put("username", username);
+		return obj;
+	}
+	
+	public void test () {
+		System.out.println(jwtProps.getKey());
+		System.out.println("JWTKEY -> " + KEY);
 	}
 }

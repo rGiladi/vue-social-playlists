@@ -1,0 +1,17 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.me.Security.JwtSettingsProperties",
+      "name": "jwt",
+      "type": "com.me.Security.JwtSettingsProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.me.Security.JwtSettingsProperties",
+      "name": "jwt.key",
+      "type": "java.lang.String"
+    }
+  ]
+}

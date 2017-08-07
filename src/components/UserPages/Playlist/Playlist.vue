@@ -119,7 +119,7 @@ export default {
     font-size: 1.3em;
   }
 
-  .author-wrapper:hover, .author-wrapper:hover .home {
+  .author-wrapper:hover {
     color: #000;
   }
 
@@ -128,6 +128,12 @@ export default {
     bottom: 1px;
     left: 5px;
     font-size: 1.15em;
+    transition: bottom 0.1s;
+  }
+
+  .author-wrapper:hover .home {
+    color: #000;
+    bottom: 5px;
   }
 
 </style>
