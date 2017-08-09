@@ -1,6 +1,6 @@
 <template>
   <div class="music-player">
-    <youtube :video-id="currentSong.vidId" @ended="playNext" :mute="true" :player-vars="{autoplay: 1}" :player-width="400" :player-height="250"></youtube>
+    <youtube :video-id="currentSong.vidId || ''" @ended="playNext" :mute="true" :player-vars="{autoplay: 1}" :player-width="400" :player-height="250"></youtube>
   </div>
 </template>
 

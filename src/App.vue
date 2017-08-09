@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view name="ano-navigation"></router-view>
-    <keep-alive include="PlaylistsList, playlist">
+    <keep-alive include="playlists-list, playlist">
       <router-view></router-view>
     </keep-alive>
   </div>
@@ -32,5 +32,11 @@ export default {
     font-family: 'Hammersmith One', sans-serif;
     display: flex;
     flex-flow: column;
+  }
+
+  .et-wrapper {
+    font-family: 'Hammersmith One', sans-serif;
+    width: 50%;
+    max-width: 50%;
   }
 </style>

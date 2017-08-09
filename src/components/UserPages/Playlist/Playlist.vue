@@ -6,9 +6,10 @@
           {{ author }}
           <i class="material-icons home">home</i>
         </router-link>
+        <toolbar :author="author" :pid="pid" @addSong="addSong" @toggleDeleteMode="toggleDeleteMode"></toolbar>
         <span class="title">{{ title }}</span>
       </div>
-      <songs-list :songs="songsList" :current-song="currentSong" @changeSong="changeSong"></songs-list>
+      <songs-list :songs="songsList" :current-song="currentSong" :author="author" :pid="pid" :deleteMode="isDeleteMode" @changeSong="changeSong"></songs-list>
     </div>
     <div class="col right">
       <music-player :songs="songsList" :current-song="currentSong" :current-song-indx="currentSongIndx" @nextSong="playNext"></music-player>
@@ -21,13 +22,15 @@
 import MusicPlayer from './MusicPlayer'
 import SongsList from './SongsList'
 import RelatedSongsList from './RelatedSongsList'
+import Toolbar from './Toolbar'
 
 export default {
   name: 'playlist',
   components: {
     'music-player': MusicPlayer,
     'songs-list': SongsList,
-    'related-songs-list': RelatedSongsList
+    'related-songs-list': RelatedSongsList,
+    'toolbar': Toolbar
   },
   data () {
     return {
@@ -35,11 +38,15 @@ export default {
       currentSong: {},
       currentSongIndx: 0,
       author: this.$route.params.username,
-      title: null
+      title: null,
+      pid: this.$route.params.playlist_id,
+      isDeleteMode: false
     }
   },
-  mounted () {
-    this.loadPlaylist(sessionStorage.getItem(this.$route.path))
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.loadPlaylist(sessionStorage.getItem(to.path))
+    })
   },
   methods: {
     changeSong (songObj) {
@@ -51,13 +58,17 @@ export default {
     },
     loadPlaylist (playlist) {
       if (playlist) {
-        sessionStorage.removeItem(this.$route.path)
         this.fillPlaylistData(JSON.parse(playlist))
+        sessionStorage.removeItem(this.$route.path)
       } else {
-        let pid = this.$route.params.playlist_id
-        this.axios.get('/api/playlists/' + this.author + '/' + pid)
+        this.axios.get('/api/playlists/' + this.author + '/' + this.pid, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+          }
+        })
         .then(res => {
-          this.fillPlaylistData(res.data)
+          this.fillPlaylistData(res.data.playlist)
+          this.$store.commit('logUserIn', res.data.authenticatedUser)
         }).catch(err => {
           alert(err.response.data)
           this.$router.push('/error')
@@ -66,8 +77,19 @@ export default {
     },
     fillPlaylistData (playlist) {
       this.songsList = playlist.songs
-      this.currentSong = playlist.songs[0]
+      this.currentSong = playlist.songs[0] || {}
       this.title = playlist.title
+    },
+    addSong (songObject) {
+      this.songsList.push(songObject)
+      this.$toast(songObject.title + ' was added to your playlist!', {
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        duration: 3000
+      })
+    },
+    toggleDeleteMode () {
+      this.isDeleteMode = !this.isDeleteMode
     }
   }
 }

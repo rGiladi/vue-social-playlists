@@ -18,7 +18,11 @@ export default {
   },
   watch: {
     currentSong: function (obj) {
-      this.getRelatedVideos(obj.vidId)
+      if (!obj.vidId) {
+        this.getRelatedVideos('d-diB65scQU') // Dont worry be happy
+      } else {
+        this.getRelatedVideos(obj.vidId)
+      }
     }
   },
   methods: {

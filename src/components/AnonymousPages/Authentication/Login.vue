@@ -5,7 +5,7 @@
       <form>
         <input type="text" placeholder="Enter username" v-model.trim="userName" />
         <input type="password" placeholder="Enter password" v-model="userPassword" />
-        <button @click.prevent="Login">Sign Up</button>
+        <button @click.prevent="Login">Log In</button>
       </form>
     </div>
   </div>

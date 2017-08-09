@@ -8,30 +8,13 @@ import ExamplePlaylistCreator from '@/components/AnonymousPages/ExamplePlaylistC
 Vue.use(VueYouTubeEmbed)
 Vue.use(VueAxios, axios)
 
-var sinon = require('sinon')
+// var sinon = require('sinon')
 
 describe('ExamplePlaylistCreator Component', () => {
   var vm
   before(() => {
     const Constructor = Vue.extend(ExamplePlaylistCreator)
     vm = new Constructor({ router }).$mount()
-  })
-  describe('getSongObjectFromYoutube Method', () => {
-    it('should successfuly process the url', (done) => {
-      let url = 'https://www.youtube.com/watch?v=4CmcnWQ-754'
-      vm.getSongObjectFromYoutube(url)
-      .then(() => {
-        expect(vm.$data.ytSongObject.title).to.not.equal('')
-        done()
-      })
-    })
-    it('should alert user for invalid url', () => {
-      let url = 'https://www.google.com'
-      let spy = sinon.spy(window, 'alert')
-      vm.getSongObjectFromYoutube(url)
-      expect(spy.calledWith('Not a valid url!')).to.be.true
-      spy.restore()
-    })
   })
   describe('beforeDestroy Hook', () => {
     it('shoud save user input to sessionStorage', () => {

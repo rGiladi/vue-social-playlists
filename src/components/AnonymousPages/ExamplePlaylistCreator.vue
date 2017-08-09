@@ -9,13 +9,7 @@
       <div class="s2" v-show="currentStep === 2">
         <div class="add-songs" v-show="playlistAddedSongs.length < 3">
           <h1> Add a few songs </h1>
-          <label for="yt-url">Ex: https://www.youtube.com/watch?v=d_HlPboLRL8</label>
-          <input type="text" placeholder="Song's URL" name="yt-url" v-model.trim="songUrl"/>
-          <i class="material-icons add-icon" @click="addSong">add_circle_outline</i>
-          <div class="yt-video-details" v-show="ytSongObject.title">
-            <img :src="ytSongObject.thumbnail" />
-            <p v-text="ytSongObject.title" />
-          </div>
+          <get-songs-from-youtube mode="list" @addSong="addSong"></get-songs-from-youtube>
         </div>
         <div v-show="playlistAddedSongs.length === 3">
           <h1> Add more later... </h1>
@@ -38,79 +32,23 @@
 </template>
 
 <script>
+import GetSongsFromYoutube from './GetSongsFromYoutube'
 export default {
   name: 'example-playlist-creator',
+  components: {
+    'get-songs-from-youtube': GetSongsFromYoutube
+  },
   data () {
     return {
       currentStep: 1,
       pTitle: '',
       pPassword: '',
-      songUrl: '',
-      ytSongObject: {
-        title: '',
-        thumbnail: '',
-        time: ''
-      },
       playlistAddedSongs: []
     }
   },
   methods: {
-    addSong () {
-      this.playlistAddedSongs.push(JSON.parse(JSON.stringify(this.ytSongObject)))
-      this.clearSongObject()
-    },
-    clearSongObject () {
-      for (let key in this.ytSongObject) {
-        this.ytSongObject[key] = ''
-      }
-      this.songUrl = ''
-    },
-    getSongObjectFromYoutube (url) {
-      let vm = this
-      let vidId = vm.$youtube.getIdFromURL(url)
-      if (vidId !== url) {
-        return vm.axios({
-          method: 'get',
-          url: 'https://www.googleapis.com/youtube/v3/videos',
-          params: {
-            'id': vidId,
-            'part': 'snippet,contentDetails',
-            'key': 'AIzaSyAtwxH_RK0NDVhNYLcTERQ9tTvAkBc01cQ'
-          }
-        }).then(res => {
-          vm.ytSongObject.title = res.data.items[0].snippet.title
-          vm.ytSongObject.thumbnail = res.data.items[0].snippet.thumbnails.medium.url
-          vm.ytSongObject.time = this.convertYoutubeTime(res.data.items[0].contentDetails.duration)
-        }).catch(() => {
-          alert('Something went wrong, please refresh and try again')
-        })
-      } else {
-        alert('Not a valid url!')
-      }
-    },
-    convertYoutubeTime (time) {
-      let matches = time.match(/[0-9]+[HMS]/g)
-      return matches.reduce(function (acc, val) {
-        switch (val[val.length - 1]) {
-          case 'H':
-            return acc + parseInt(val) + ':'
-          case 'M':
-            return acc + parseInt(val) + ':'
-          case 'S':
-            return acc + parseInt(val)
-          default:
-            return acc
-        }
-      }, '')
-    }
-  },
-  watch: {
-    songUrl: function (url) {
-      if (url === '') {
-        this.clearSongObject()
-      } else {
-        this.getSongObjectFromYoutube(url)
-      }
+    addSong (songObject) {
+      this.playlistAddedSongs.push(JSON.parse(JSON.stringify(songObject)))
     }
   },
   beforeDestroy () {
@@ -160,30 +98,6 @@ export default {
 
   .steps .s2 .add-icon {
     font-size: 52px;
-  }
-
-  .yt-video-details {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-    width: calc(45% + 1.5em);
-    height: 124px;
-    background: rgba(0, 0, 0, 0.5);
-    color: #fff;
-    font-size: 1.4em;
-  }
-
-  .yt-video-details img {
-    float: left;
-    height: 100%;
-  }
-
-  .yt-video-details p {
-    height: 100%;
-    text-align: left;
-    padding: 0 0.2em;
-    overflow-y: auto;
-    overflow-x: hidden;
   }
 
   .added-songs-list {

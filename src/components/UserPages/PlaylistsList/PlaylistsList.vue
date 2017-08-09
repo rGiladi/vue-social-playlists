@@ -19,6 +19,7 @@
 
 <script>
 import Toolbar from './Toolbar'
+import axios from 'axios'
 
 export default {
   name: 'playlists-list',
@@ -33,15 +34,34 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    next(vm => {
-      let username = to.params.username
-      vm.axios.get('/api/playlists/' + username)
-      .then(res => {
+    let username = to.params.username
+    axios.get('/api/playlists/' + username, {
+      params: {
+        'auth-required': true
+      },
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+      }
+    }).then(res => {
+      next(vm => {
         vm.playlists = res.data
         vm.owner = username
-      }).catch(() => {
-        vm.$router.push('/error')
+        vm.$store.commit('logUserIn', username)
       })
+    }).catch(err => {
+      switch (err.response.status) {
+        case 401:
+          if (typeof err.response.data === 'string') {
+            next('/' + err.response.data + '/playlists?re')
+          } else {
+            next('/login')
+            localStorage.clear()
+          }
+          break
+        case 400:
+          next('/error')
+          console.log(err.response)
+      }
     })
   },
   methods: {
@@ -51,9 +71,9 @@ export default {
       sessionStorage.setItem(playlistRoute, JSON.stringify(playlist))
     },
     logout () {
-      localStorage.removeItem('user')
-      localStorage.removeItem('jwtToken')
+      this.$store.commit('logUserOut')
       this.$router.push('/')
+      this.$destroy()
     },
     addNewPlaylist (title) {
       this.playlists.push({
@@ -70,7 +90,8 @@ export default {
         this.axios.delete('/api/playlists/' + this.owner,
           {
             params: {
-              'pid': indx
+              'pid': indx,
+              'auth-required': true
             },
             headers: {
               'Authorization': 'Bearer ' + (localStorage.getItem('jwtToken') || '')
@@ -159,6 +180,7 @@ export default {
 
   .btn-delete {
     position: absolute;
+    right: 15px;
     font-size: 2em;
     color: #FF5964;
     margin-top: 2px;

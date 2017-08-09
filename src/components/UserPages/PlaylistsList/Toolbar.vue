@@ -43,6 +43,9 @@ export default {
             songs: []
           },
           {
+            params: {
+              'auth-required': true
+            },
             headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
             }

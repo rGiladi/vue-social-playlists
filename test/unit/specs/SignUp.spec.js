@@ -2,7 +2,7 @@ import Vue from 'vue'
 import router from '@/router'
 import SignUp from '@/components/AnonymousPages/Authentication/SignUp'
 import Vuelidate from 'vuelidate'
-import axios from 'axios'
+// import axios from 'axios'
 
 Vue.use(Vuelidate)
 
