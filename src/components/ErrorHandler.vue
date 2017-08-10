@@ -20,6 +20,8 @@ export default {
       let error = vm.$store.getters.getError
       if (error) {
         vm.type = error.type
+      } else if (to.name === 'global-error') {
+        vm.type = 404
       }
     })
   },
@@ -28,7 +30,8 @@ export default {
       let messages = {
         default: 'There was an error...',
         400: 'User doesn\'t exists',
-        401: 'You don\'t have permission to view this page'
+        401: 'You don\'t have permission to view this page',
+        404: 'Page doesn\'t exists'
       }
       return messages[this.type]
     }

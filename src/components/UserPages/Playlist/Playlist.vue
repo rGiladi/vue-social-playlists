@@ -181,6 +181,19 @@ export default {
   .slider-cover.active {
     top: 0;
     opacity: 1;
+    z-index: 999;
   }
 
+  @media only screen and (max-width: 913px) {
+    .playlist-page {
+      min-width: 913px;
+      flex-basis: auto;
+      flex: 0;
+      flex-grow: 1;
+    }
+
+    body {
+      overflow: hidden;
+    }
+  }
 </style>

@@ -164,7 +164,7 @@ export default {
 
   .playlists-wrapper {
     display: flex;
-    padding-left: 25px;
+    margin-right: -10px;
     flex-flow: row wrap;
   }
 
@@ -242,6 +242,7 @@ export default {
   .user-playlists .slider-cover.active {
     top: 0;
     opacity: 1;
+    z-index: 999;
   }
 
   .user-playlists .logout-cover {
@@ -261,5 +262,16 @@ export default {
     opacity: 1;
   }
 
+  @media only screen and (max-width: 1130px) {
+    .playlist-box {
+      width: 30%;
+    }
+  } 
+
+  @media only screen and (max-width: 995px) {
+    .playlist-box {
+      width: 258.500px;
+    }
+  }
 
 </style>

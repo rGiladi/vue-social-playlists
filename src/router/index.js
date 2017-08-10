@@ -49,6 +49,11 @@ const router = new Router({
       path: '/error',
       name: 'Error',
       component: ErrorHandler
+    },
+    {
+      path: '/*',
+      name: 'global-error',
+      component: ErrorHandler
     }
   ],
   mode: 'history'

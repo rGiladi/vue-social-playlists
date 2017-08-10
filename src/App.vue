@@ -32,6 +32,7 @@ export default {
     font-family: 'Hammersmith One', sans-serif;
     display: flex;
     flex-flow: column;
+    min-width: 680px;
   }
 
   .et-wrapper {
