@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import PlaylistEventBus from '@/components/UserPages/Playlist/PlaylistEventBus.js'
+
 export default {
   name: 'get-songs-from-youtube',
   props: ['mode'],
@@ -30,6 +32,9 @@ export default {
     if (this.mode === 'playlist') {
       this.showOrHideAddButton = false
     }
+    PlaylistEventBus.$on('changeSongUrl', vidId => {
+      this.songUrl = vidId
+    })
   },
   methods: {
     getSongObjectFromYoutube (url) {
@@ -42,7 +47,6 @@ export default {
             key: 'AIzaSyAtwxH_RK0NDVhNYLcTERQ9tTvAkBc01cQ'
           }
         }).then(res => {
-          console.log(res.data.items[0].contentDetails.duration)
           this.ytSongObject.title = res.data.items[0].snippet.title
           this.ytSongObject.thumbnail = res.data.items[0].snippet.thumbnails.medium.url
           this.ytSongObject.time = this.convertYoutubeTime(res.data.items[0].contentDetails.duration)

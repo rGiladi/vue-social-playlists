@@ -6,6 +6,7 @@ import SignUp from '@/components/AnonymousPages/Authentication/SignUp'
 import Login from '@/components/AnonymousPages/Authentication/Login'
 import PlaylistsList from '@/components/UserPages/PlaylistsList/PlaylistsList'
 import Playlist from '@/components/UserPages/Playlist/Playlist'
+import ErrorHandler from '@/components/ErrorHandler'
 
 Vue.use(Router)
 
@@ -43,6 +44,11 @@ const router = new Router({
       path: '/:username/playlists/:playlist_id',
       name: 'Playlist',
       component: Playlist
+    },
+    {
+      path: '/error',
+      name: 'Error',
+      component: ErrorHandler
     }
   ],
   mode: 'history'

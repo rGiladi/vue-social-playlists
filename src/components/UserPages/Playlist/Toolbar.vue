@@ -13,7 +13,9 @@
 </template>
 
 <script>
+import PlaylistEventBus from '@/components/UserPages/Playlist/PlaylistEventBus.js'
 import GetSongsFromYoutube from '@/components/AnonymousPages/GetSongsFromYoutube'
+
 export default {
   name: 'playlists-tools',
   props: ['author', 'pid'],
@@ -25,6 +27,11 @@ export default {
       mode: '',
       password: ''
     }
+  },
+  mounted () {
+    PlaylistEventBus.$on('changeSongUrl', () => {
+      this.mode = 'add'
+    })
   },
   methods: {
     toggleDeleteMode () {
@@ -47,8 +54,8 @@ export default {
           }
         }
       ).then(res => {
-        this.toggleAddMode()
         this.$emit('addSong', songObject)
+        this.toggleAddMode()
       }).catch(err => {
         alert(err.response.data)
       })

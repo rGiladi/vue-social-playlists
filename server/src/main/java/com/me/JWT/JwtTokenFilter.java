@@ -1,4 +1,4 @@
-package com.me.Security;
+package com.me.JWT;
 
 import java.io.IOException;
 
@@ -24,6 +24,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		
 		String token = request.getHeader("Authorization");
+		Boolean authRequired = Boolean.parseBoolean(request.getParameter("auth-required"));
 		
 		if (token != null) {
 			try {
@@ -31,7 +32,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 				request.setAttribute("userFromToken", claims.getIssuer());
 				filterChain.doFilter(request, response);
 			} catch (Exception ex) {
-				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+				if (authRequired) {
+					response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Token");
+				} else {
+					filterChain.doFilter(request, response);
+				}
 			}	
 		} else {
 			filterChain.doFilter(request, response);

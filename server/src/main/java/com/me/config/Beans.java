@@ -4,7 +4,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.me.Security.JwtTokenFilter;
+import com.me.JWT.JwtTokenFilter;
 
 @Configuration
 public class Beans {
@@ -15,5 +15,4 @@ public class Beans {
 		registration.setEnabled(false);
 		return registration;
 	}
-	
 }

@@ -2,19 +2,20 @@
   <div class="playlist-page">
     <div class="col left">
       <div class="playlist-details">
-        <router-link :to="'/' + author + '/playlists'" tag="div" class="author-wrapper">
+        <div class="author-wrapper" @click="returnHome">
           {{ author }}
           <i class="material-icons home">home</i>
-        </router-link>
+        </div>
         <toolbar :author="author" :pid="pid" @addSong="addSong" @toggleDeleteMode="toggleDeleteMode"></toolbar>
         <span class="title">{{ title }}</span>
       </div>
-      <songs-list :songs="songsList" :current-song="currentSong" :author="author" :pid="pid" :deleteMode="isDeleteMode" @changeSong="changeSong"></songs-list>
+      <songs-list :songs="songsList" :current-song="currentSong" :author="author" :pid="pid" :deleteMode="isDeleteMode" @deleteSong="deleteSong" @changeSong="changeSong"></songs-list>
     </div>
     <div class="col right">
       <music-player :songs="songsList" :current-song="currentSong" :current-song-indx="currentSongIndx" @nextSong="playNext"></music-player>
       <related-songs-list :current-song="currentSong" @changeSong="changeSong"></related-songs-list>
     </div>
+    <div class="slider-cover" :class="{ active: slide }"></div>
   </div>
 </template>
 
@@ -40,15 +41,40 @@ export default {
       author: this.$route.params.username,
       title: null,
       pid: this.$route.params.playlist_id,
-      isDeleteMode: false
+      isDeleteMode: false,
+      slide: false
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.loadPlaylist(sessionStorage.getItem(to.path))
+      let playlist = vm.$store.getters.getLoadedPlaylist
+      if (playlist) { // If playlist has already been loaded
+        vm.fillPlaylistData(playlist)
+      } else {
+        vm.loadPlaylist()
+      }
     })
   },
   methods: {
+    loadPlaylist (playlist) {
+      this.axios.get('/api/playlists/' + this.author + '/' + this.pid, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+        }
+      })
+      .then(res => {
+        this.fillPlaylistData(res.data.playlist)
+        this.$store.commit('logUserIn', res.data.authenticatedUser)
+      }).catch(err => {
+        alert(err.response.data)
+        this.$router.push('/')
+      })
+    },
+    fillPlaylistData (playlist) {
+      this.songsList = playlist.songs
+      this.currentSong = playlist.songs[0] || {}
+      this.title = playlist.title
+    },
     changeSong (songObj) {
       this.currentSongIndx = songObj.indx
       this.currentSong = songObj.song
@@ -56,40 +82,23 @@ export default {
     playNext (songObj) {
       this.changeSong(songObj)
     },
-    loadPlaylist (playlist) {
-      if (playlist) {
-        this.fillPlaylistData(JSON.parse(playlist))
-        sessionStorage.removeItem(this.$route.path)
-      } else {
-        this.axios.get('/api/playlists/' + this.author + '/' + this.pid, {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
-          }
-        })
-        .then(res => {
-          this.fillPlaylistData(res.data.playlist)
-          this.$store.commit('logUserIn', res.data.authenticatedUser)
-        }).catch(err => {
-          alert(err.response.data)
-          this.$router.push('/error')
-        })
-      }
-    },
-    fillPlaylistData (playlist) {
-      this.songsList = playlist.songs
-      this.currentSong = playlist.songs[0] || {}
-      this.title = playlist.title
-    },
     addSong (songObject) {
       this.songsList.push(songObject)
-      this.$toast(songObject.title + ' was added to your playlist!', {
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-        duration: 3000
-      })
+      this.$toast(songObject.title + ' was added to your playlist!', {duration: 4500})
+    },
+    deleteSong (obj) {
+      this.songsList.splice(obj.indx, 1)
+      this.$toast(obj.song.title + ' was deleted from your playlist!', {duration: 4500})
     },
     toggleDeleteMode () {
       this.isDeleteMode = !this.isDeleteMode
+    },
+    returnHome () {
+      this.slide = true
+      setTimeout(() => {
+        this.$router.push('/' + this.author + '/playlists')
+        this.slide = false
+      }, 500)
     }
   }
 }
@@ -145,7 +154,7 @@ export default {
     color: #000;
   }
 
-  .material-icons.home {
+  .playlist-page .material-icons.home {
     position: relative;
     bottom: 1px;
     left: 5px;
@@ -156,6 +165,22 @@ export default {
   .author-wrapper:hover .home {
     color: #000;
     bottom: 5px;
+  }
+
+  .playlist-page .slider-cover {
+    position: fixed;
+    top: 100vh;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    background: linear-gradient(to bottom, #9733EE, #DA22FF) no-repeat;
+    transition: top .5s;
+  }
+
+  .slider-cover.active {
+    top: 0;
+    opacity: 1;
   }
 
 </style>

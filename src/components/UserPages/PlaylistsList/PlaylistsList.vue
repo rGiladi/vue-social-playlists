@@ -1,19 +1,21 @@
 <template>
-  <div class="user-playlists">
+  <div class="user-playlists" v-show="owner">
     <div class="header">
       <span class="title"> {{ owner }}'s Playlists</span>
       <toolbar :owner="owner" @addNewPlaylist="addNewPlaylist" @toggleDeleteMode="toggleDeleteMode"></toolbar>
       <span @click="logout" class="btn-logout">Logout</span>
     </div>
-    <div class="playlists-wrapper">
-      <div v-for="playlist, $indx in playlists" class="playlist-box" @click="openPlaylist(playlist, $indx)">
+    <transition-group name="playlists-list" tag="div" class="playlists-wrapper">
+      <div v-for="playlist, $indx in playlists" class="playlist-box" @click="openPlaylist(playlist, $indx)" :key="$indx">
         <img :src="playlist.songs[0].thumbnail" v-if="playlist.songs[0]" />
         <span v-text="playlist.songs.length + ' Videos'" class="p-size"></span>
         <span v-text="playlist.title" class="p-title"></span>
         <i class="material-icons btn-delete" @click.stop="deletePlaylist($indx)" v-show="deleteMode">delete</i>
       </div>
-    </div>
-    <p v-if="!playlists" class="nothing-here"> Nothing here yet.. </p>
+    </transition-group>
+    <p v-if="playlists && playlists.length === 0" class="nothing-here"> Nothing here yet.. </p>
+    <div class="slider-cover" :class="{ active: slide }"></div>
+    <div class="logout-cover" :class="{ active: onLogout }"></div>
   </div>
 </template>
 
@@ -30,50 +32,69 @@ export default {
     return {
       owner: null,
       playlists: null,
-      deleteMode: false
+      deleteMode: false,
+      slide: false,
+      onLogout: false
     }
   },
-  beforeRouteEnter (to, from, next) {
-    let username = to.params.username
-    axios.get('/api/playlists/' + username, {
-      params: {
-        'auth-required': true
-      },
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
-      }
-    }).then(res => {
-      next(vm => {
-        vm.playlists = res.data
-        vm.owner = username
-        vm.$store.commit('logUserIn', username)
+  created () {
+    this.owner = this.$route.params.username
+    if (localStorage.getItem('user')) {
+      axios.get('/api/playlists/' + this.owner, {
+        params: {
+          'auth-required': true
+        },
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+        }
+      }).then(res => {
+        this.playlists = res.data.length === 0 ? [] : res.data
+        this.$store.commit('logUserIn', this.owner)
+      }).catch(err => {
+        switch (err.response.status) {
+          case 401:
+            if (typeof err.response.data === 'object' && err.response.data.userFromToken) {
+              this.$store.commit('setError', {
+                type: 401
+              })
+              this.$router.push('/error')
+            } else {
+              localStorage.clear()
+              this.$router.push('/login')
+            }
+            break
+          case 400:
+            this.$store.commit('setError', {
+              type: 400
+            })
+            this.$router.push('/error')
+        }
+        this.$destroy()
       })
-    }).catch(err => {
-      switch (err.response.status) {
-        case 401:
-          if (typeof err.response.data === 'string') {
-            next('/' + err.response.data + '/playlists?re')
-          } else {
-            next('/login')
-            localStorage.clear()
-          }
-          break
-        case 400:
-          next('/error')
-          console.log(err.response)
-      }
-    })
+    } else {
+      this.$store.commit('setError', {
+        type: 401
+      })
+      this.$router.push('/error')
+      this.$destroy()
+    }
   },
   methods: {
     openPlaylist (playlist, indx) {
-      let playlistRoute = this.$route.path + '/' + indx
-      this.$router.push(playlistRoute)
-      sessionStorage.setItem(playlistRoute, JSON.stringify(playlist))
+      this.slide = true
+      setTimeout(() => {
+        this.$router.push(this.$route.path + '/' + indx)
+        this.$store.commit('setLoadedPlaylist', playlist)
+        this.slide = false
+      }, 500)
     },
     logout () {
-      this.$store.commit('logUserOut')
-      this.$router.push('/')
-      this.$destroy()
+      this.onLogout = true
+      setTimeout(() => {
+        this.$store.commit('logUserOut')
+        this.$router.push('/')
+        this.$destroy()
+      }, 550)
     },
     addNewPlaylist (title) {
       this.playlists.push({
@@ -81,6 +102,7 @@ export default {
         password: '',
         songs: []
       })
+      this.$toast('New playlist "' + title + '" has been added!', {duration: 4500})
     },
     toggleDeleteMode () {
       this.deleteMode = !this.deleteMode
@@ -97,9 +119,10 @@ export default {
               'Authorization': 'Bearer ' + (localStorage.getItem('jwtToken') || '')
             }
           }).then(() => {
+            this.$toast('"' + this.playlists[indx].title + '" was deleted from your list', {duration: 4500})
             this.playlists.splice(indx, 1)
           }).catch(err => {
-            console.log(err.response.data.message)
+            alert(err.response.data)
           })
       }
     }
@@ -110,6 +133,7 @@ export default {
 <style>
 
   .user-playlists {
+    height: 100%;
     padding: 30px 45px;
     overflow: auto;
   }
@@ -195,5 +219,47 @@ export default {
   .nothing-here {
     display: block;
   }
+
+  .playlists-list-enter-active, .song-list-leave-active {
+    transition: all 0.4s;
+  }
+  .playlists-list-enter, .song-list-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .user-playlists .slider-cover {
+    position: fixed;
+    top: -100vh;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    background: linear-gradient(to bottom, #9733EE, #DA22FF) no-repeat;
+    transition: top .5s;
+  }
+
+  .user-playlists .slider-cover.active {
+    top: 0;
+    opacity: 1;
+  }
+
+  .user-playlists .logout-cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    z-index: -10;
+    transition: opacity .1s;
+  }
+
+  .user-playlists .logout-cover.active {
+    z-index: 999;
+    opacity: 1;
+  }
+
 
 </style>

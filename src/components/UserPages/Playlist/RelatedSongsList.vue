@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import PlaylistEventBus from '@/components/UserPages/Playlist/PlaylistEventBus.js'
+
 export default {
   name: 'related-songs-list',
   props: ['currentSong'],
@@ -32,6 +34,7 @@ export default {
           vidId: video.id.videoId
         }
       })
+      PlaylistEventBus.$emit('changeSongUrl', 'https://www.youtube.com/watch?v=' + video.id.videoId)
     },
     getRelatedVideos (vidId) {
       this.axios.get('https://www.googleapis.com/youtube/v3/search',

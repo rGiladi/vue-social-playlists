@@ -1,4 +1,15 @@
-/home/roy/STS-workspace/spring-vue/src/main/java/com/me/Users/Controller.java
-/home/roy/STS-workspace/spring-vue/src/main/java/com/me/Users/UserModel.java
-/home/roy/STS-workspace/spring-vue/src/main/java/com/me/SpringVueApplication.java
-/home/roy/STS-workspace/spring-vue/src/main/java/com/me/Users/UserRepository.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/JWT/JwtTokenFilter.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/Playlists/PlaylistModel.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/Security/SecurityBeans.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/Playlists/PlaylistsListController.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/JWT/JwtSettingsProperties.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/Authentication/UserModel.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/Playlists/SongModel.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/Playlists/PlaylistController.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/Authentication/UserRepository.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/Authentication/AuthenticationController.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/config/Beans.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/SpringVueApplication.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/Security/ValidateUserRequest.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/JWT/JwtUtils.java
+/home/roy/Vue Projects/ProjectsRemake/vue-social-playlists/server/src/main/java/com/me/Security/SecurityConfig.java

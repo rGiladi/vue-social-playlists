@@ -1,25 +1,25 @@
-package com.me.Security;
+package com.me.JWT;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+@SuppressWarnings("unused")
 @Configuration
 public class JwtUtils {
+	
 	
 	private JwtSettingsProperties jwtProps;
 	private String KEY;
@@ -42,7 +42,7 @@ public class JwtUtils {
 	    								.setIssuer(issuer)
 						    			.setSubject("USER")
 						    			.signWith(signatureAlgorithm, signingKey)
-	    								.setExpiration(new Date(new Date().getTime() + (3600 * 1000 * 24)));			
+	    								.setExpiration(new Date(new Date().getTime() + (3600 * 1000 * 72)));			
 	    
 	    return builder.compact();
 	    
@@ -63,7 +63,6 @@ public class JwtUtils {
 	}
 	
 	public void test () {
-		System.out.println(jwtProps.getKey());
-		System.out.println("JWTKEY -> " + KEY);
+		System.out.println(KEY);
 	}
 }

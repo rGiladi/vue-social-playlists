@@ -38,5 +38,11 @@ export default {
     font-family: 'Hammersmith One', sans-serif;
     width: 50%;
     max-width: 50%;
+    background: rgba(48,45,55,.9);
+    left: 50% !important;
+    transform: translateX(-50%);
+    top: auto !important;
+    bottom: 0 !important;
+    right: auto !important;
   }
 </style>

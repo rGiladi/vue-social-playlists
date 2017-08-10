@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
+import com.me.JWT.JwtTokenFilter;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -21,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
 		.antMatcher("/api/playlists/**")
-		.addFilterBefore(jwtTokenFilter, ChannelProcessingFilter.class);
+		.addFilterBefore(jwtTokenFilter, ChannelProcessingFilter.class);	
 		
 		http.headers().cacheControl();
 	}

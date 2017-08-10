@@ -2,7 +2,7 @@
   <transition-group name="song-list" tag="div" id="playlist-list">
     <div class="song-item" v-for="song, $indx in songs" @click="playSong(song, $indx)" :class="currentSong === song ? 'active' : ''" :key="$indx">
       <div class="song-title">
-        <i class="material-icons" v-show="deleteMode" @click.stop="deleteSong($indx)">delete</i>
+        <i class="material-icons" v-show="deleteMode" @click.stop="deleteSong(song, $indx)">delete</i>
         <span v-text="song.title"></span>
       </div>
       <span class="song-time" v-text="song.time"></span>
@@ -26,7 +26,7 @@ export default {
         indx: indx
       })
     },
-    deleteSong (indx) {
+    deleteSong (song, indx) {
       this.axios.delete('/api/playlists/' + this.author + '/' + this.pid,
         {
           params: {
@@ -38,10 +38,11 @@ export default {
           }
         }
       ).then(res => {
-        console.log(res)
-        this.$emit('toggleDeleteMode')
+        this.$emit('deleteSong', {
+          indx: indx,
+          song: song
+        })
       }).catch(err => {
-        console.log(err.response)
         alert(err.response.data)
         switch (err.response.data) {
           case 'Please login again or refresh the page':

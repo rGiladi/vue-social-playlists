@@ -1,4 +1,4 @@
-package com.me.Security;
+package com.me.JWT;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
