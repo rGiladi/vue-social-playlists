@@ -68,16 +68,17 @@ export default {
 
 <style>
   .playlists-list-tools {
-    display: inline-block;
+    display: flex;
     z-index: 99;
+    margin-bottom: 15px;
   }
 
   .tool {
-    display: inline-block;
+    margin-right: 5px;
     background: #fff;
     width: 44px;
     height: 44px;
-    line-height: 48px;
+    line-height: 58px;
     border-radius: 50%;
     text-align: center;
     cursor: pointer;
@@ -92,21 +93,21 @@ export default {
 
   .add-box {
     position: absolute;
-    margin-top: 5px;
+    margin-top: 50px;
     z-index: 99;
   }
 
   .add-box input {
     display: block;
     width: 100%;
-    font-size: .6em;
+    font-size: 1.3em;
     margin-bottom: 5px;
   }
 
   .add-box button {
-    width: calc(100% + 2.4em);
+    width: calc(100% + 3.5em);
     color: #000;
-    font-size: .4em;
+    font-size: .6em;
     transition: color, background 0.3s;
   }
 
@@ -118,5 +119,24 @@ export default {
   .add-box button .material-icons {
     position: relative;
     top: 2px;
+  }
+
+
+  @media only screen and (max-width: 482px) {
+    .tool {
+      width: 38px;
+      height: 38px;
+      line-height: 54px;
+    }
+  }
+
+  @media only screen and (max-width: 385px) {
+
+    .add-box input {
+      font-size: 1.165em;
+    }
+    .add-box button {
+      width: calc(100% + 3.1em);
+    }
   }
 </style>

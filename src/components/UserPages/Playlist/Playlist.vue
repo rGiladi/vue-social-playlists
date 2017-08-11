@@ -3,15 +3,14 @@
     <div class="col left">
       <div class="playlist-details">
         <div class="author-wrapper" @click="returnHome">
-          {{ author }}
-          <i class="material-icons home">home</i>
+          <span v-text="author"></span>
         </div>
         <toolbar :author="author" :pid="pid" @addSong="addSong" @toggleDeleteMode="toggleDeleteMode"></toolbar>
         <span class="title">{{ title }}</span>
       </div>
       <songs-list :songs="songsList" :current-song="currentSong" :author="author" :pid="pid" :deleteMode="isDeleteMode" @deleteSong="deleteSong" @changeSong="changeSong"></songs-list>
     </div>
-    <div class="col right">
+    <div id="yt-mp-wrapper" class="col right">
       <music-player :songs="songsList" :current-song="currentSong" :current-song-indx="currentSongIndx" @nextSong="playNext"></music-player>
       <related-songs-list :current-song="currentSong" @changeSong="changeSong"></related-songs-list>
     </div>
@@ -143,23 +142,23 @@ export default {
     margin-bottom: 5px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
+    overflow-wrap: break-word;
+    flex-wrap: wrap;
+    max-width: 100%;
   }
 
-  .playlist-details .title {
-    display: block;
-    font-size: 1.3em;
+  .author-wrapper span {
+    margin-right: 5px;
+    max-width: 100%;
   }
 
   .author-wrapper:hover {
     color: #000;
   }
 
-  .playlist-page .material-icons.home {
-    position: relative;
-    bottom: 1px;
-    left: 5px;
-    font-size: 1.15em;
-    transition: bottom 0.1s;
+  .playlist-details .title {
+    display: block;
+    font-size: 1.3em;
   }
 
   .author-wrapper:hover .home {
@@ -185,15 +184,64 @@ export default {
   }
 
   @media only screen and (max-width: 913px) {
-    .playlist-page {
-      min-width: 913px;
-      flex-basis: auto;
-      flex: 0;
-      flex-grow: 1;
+    
+    #app.Playlist {
+      height: 100%;
     }
 
-    body {
-      overflow: hidden;
+    .playlist-page {
+      position: unset;
+      width: auto;
+      flex-flow: column;
+    }
+
+    .col.left {
+      order: 2;
+      width: 100%;
+      margin: 0;
+    }
+
+    .col.right {
+      position: fixed;
+      left: -600px;
+      bottom: 0;
+      transition: left .6s;
+      margin: 0;
+    }
+
+    #yt-mp-wrapper.active {
+      left: 0;
+      margin: 0;
+    }
+
+    .col.right .music-player iframe {
+      width: 112.5%;
+      position: relative;
+      top: 5px;
+    }
+
+    .col.right .music-player {
+      text-align: right;
+    }
+    .related-list {
+      display: none;
     }
   }
+
+  @media only screen and (max-width: 538px) {
+
+    .playlist-page {
+      padding: 15px;
+    }
+
+    .playlist-details .title {
+      margin-top: 10px;
+      font-size: 1em;
+    }
+
+    .playlist-list {
+      align-items: center;
+    }
+  }
+
 </style>

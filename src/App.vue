@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="route">
     <router-view name="ano-navigation"></router-view>
     <keep-alive include="playlists-list, playlist">
       <router-view></router-view>
@@ -9,7 +9,12 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  data () {
+    return {
+      route: this.$route.name
+    }
+  }
 }
 </script>
 
@@ -32,7 +37,6 @@ export default {
     font-family: 'Hammersmith One', sans-serif;
     display: flex;
     flex-flow: column;
-    min-width: 680px;
   }
 
   .et-wrapper {

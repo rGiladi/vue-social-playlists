@@ -118,4 +118,34 @@ export default {
     opacity: 0;
     transform: translateY(30px);
   }
+
+  @media only screen and (max-width: 538px) {
+
+    .playlist-page {
+      padding: 15px;
+    }
+
+    .playlist-details .title {
+      font-size: 1em;
+    }
+
+    .playlist-list {
+      align-items: center;
+    }
+
+    .song-item {
+      width: 90%;
+      transition: background .3s, color .3s;
+    }
+
+    .song-item:hover {
+      width: 90%;
+      color: #51197E;
+      background: #fff;
+    }
+
+    .song-item.active {
+      width: 90%;
+    }
+  }
 </style>

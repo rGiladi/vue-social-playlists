@@ -6,6 +6,12 @@
     <div class="tool" @click="toggleDeleteMode">
       <i class="material-icons">delete</i>
     </div>
+    <div class="tool show-yt" @click="showYoutube">
+      <i class="material-icons">music_video</i>
+    </div>
+    <router-link to="/" class="tool">
+      <i class="material-icons home">home</i>
+    </router-link>
     <div class="add-box" v-show="mode === 'add'">
       <get-songs-from-youtube mode="playlist" @addSong="addSong"></get-songs-from-youtube>
     </div>
@@ -59,6 +65,9 @@ export default {
       }).catch(err => {
         alert(err.response.data)
       })
+    },
+    showYoutube () {
+      document.getElementById('yt-mp-wrapper').classList.toggle('active')
     }
   }
 }
@@ -66,8 +75,10 @@ export default {
 
 <style>
   .playlist-tools {
+    position: relative;
+    top: 4px;
     display: inline-block;
-    z-index: 99;
+    z-index: 1;
   }
 
   .pt .tool {
@@ -82,11 +93,22 @@ export default {
     box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
     transition: color, background 0.2s;
     color: #000;
+    margin: 0;
   }
 
   .pt .tool:hover {
     color: #fff;
     background: #000;
+  }
+
+  .pt .material-icons.home {
+    position: relative;
+    top: 2px;
+    font-size: 1.05em;
+  }
+
+  .pt .tool.show-yt {
+    display: none;
   }
 
   .pt .add-box {
@@ -124,7 +146,7 @@ export default {
 
   .pt .yt-video-details {
     display: flex;
-    width: 100%;
+    width: 405px;
     position: relative;
     left: initial;
     transform: none;
@@ -150,9 +172,35 @@ export default {
 
   .pt .yt-url {
     box-sizing: border-box;
+    width: 405px;
   }
 
   .pt .yt-label {
     display: none;  
+  }
+
+
+  @media only screen and (max-width: 913px) {
+    .pt .tool.show-yt {
+      display: inline-block;
+    }
+  }
+
+  @media only screen and (max-width: 538px) {
+
+    .pt .tool {
+      height: 38px;
+      width: 38px;
+      line-height: 46px;
+    }
+
+    .playlist-page {
+      padding: 15px;
+    }
+
+    .playlist-details .title {
+      font-size: 1em;
+    }
+
   }
 </style>

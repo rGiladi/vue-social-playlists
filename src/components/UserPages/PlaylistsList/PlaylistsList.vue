@@ -1,10 +1,10 @@
 <template>
   <div class="user-playlists" v-show="owner">
     <div class="header">
-      <span class="title"> {{ owner }}'s Playlists</span>
-      <toolbar :owner="owner" @addNewPlaylist="addNewPlaylist" @toggleDeleteMode="toggleDeleteMode"></toolbar>
+      <div class="title"> {{ owner }}'s Playlists</div>
       <span @click="logout" class="btn-logout">Logout</span>
     </div>
+    <toolbar :owner="owner" @addNewPlaylist="addNewPlaylist" @toggleDeleteMode="toggleDeleteMode"></toolbar>
     <transition-group name="playlists-list" tag="div" class="playlists-wrapper">
       <div v-for="playlist, $indx in playlists" class="playlist-box" @click="openPlaylist(playlist, $indx)" :key="$indx">
         <img :src="playlist.songs[0].thumbnail" v-if="playlist.songs[0]" />
@@ -134,25 +134,29 @@ export default {
 
   .user-playlists {
     height: 100%;
-    padding: 30px 45px;
+    padding: 20px 45px;
     overflow: auto;
   }
 
   .user-playlists .header {
     font-size: 2.2em;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
 
   .user-playlists .title {
-    display: inline-block;
-    margin: 0 0 15px 0;
+    display: flex;
+    flex-flow: column;
+    margin: 0 15px 0px 0;
+    overflow-wrap: break-word;
+    max-width: 100%;
   }
 
   .btn-logout {
-    position: relative;
-    bottom: 0;
-    float: right;
     color: #fff;
     cursor: pointer;
     transition: bottom 0.1s;
@@ -164,8 +168,9 @@ export default {
 
   .playlists-wrapper {
     display: flex;
-    margin-right: -10px;
     flex-flow: row wrap;
+    justify-content: flex-start;
+    margin: 0 -10px;
   }
 
   .playlist-box {
@@ -173,14 +178,15 @@ export default {
     bottom: 0;
     display: flex;
     flex-flow: column;
-    margin: 0 5px;
-    width: 22%;
+    flex: 1;
+    flex-basis: 20%;
+    margin: 0 10px;
     padding: 10px;
-    margin-bottom: 15px;
-    color: #ebebeb;
+    margin-bottom: 10px;
     font-weight: bold;
     font-size: 1em;
     background: rgba(0,0,0,0.1);
+    color: #ebebeb;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     cursor: pointer;
     transition: bottom 0.1s;
@@ -262,15 +268,37 @@ export default {
     opacity: 1;
   }
 
-  @media only screen and (max-width: 1130px) {
+  @media only screen and (max-width: 1048px) {
     .playlist-box {
-      width: 30%;
+      flex-basis: 25%;
     }
-  } 
+  }
 
-  @media only screen and (max-width: 995px) {
+  @media only screen and (max-width: 852px) {
     .playlist-box {
-      width: 258.500px;
+      flex-basis: 28%;
+    }
+  }
+
+  @media only screen and (max-width: 656px) {
+    .user-playlists {
+      padding: 20px 25px;
+    }
+    .user-playlists .header {
+      flex-flow: column;
+    }
+
+    .btn-logout {
+      right: 40px;
+    }
+  }
+
+  @media only screen and (max-width: 482px) {
+    .user-playlists .header {
+      font-size: 1.8em;
+    }
+    .playlist-box {
+      flex-basis: 100%;
     }
   }
 
