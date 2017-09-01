@@ -179,7 +179,9 @@ export default {
     display: flex;
     flex-flow: column;
     flex: 1;
-    flex-basis: 20%;
+    flex-basis: 250px;
+    flex-grow: 0;
+    flex-shrink: 0;
     margin: 0 10px;
     padding: 10px;
     margin-bottom: 10px;
@@ -206,6 +208,10 @@ export default {
     font-size: .8em;
     opacity: .8;
     margin-bottom: 7.5px;
+  }
+  
+  .playlist-box .p-title {
+    font-size: 1.2em;
   }
 
   .btn-delete {
@@ -268,18 +274,6 @@ export default {
     opacity: 1;
   }
 
-  @media only screen and (max-width: 1048px) {
-    .playlist-box {
-      flex-basis: 25%;
-    }
-  }
-
-  @media only screen and (max-width: 852px) {
-    .playlist-box {
-      flex-basis: 28%;
-    }
-  }
-
   @media only screen and (max-width: 656px) {
     .user-playlists {
       padding: 20px 25px;
@@ -298,7 +292,7 @@ export default {
       font-size: 1.8em;
     }
     .playlist-box {
-      flex-basis: 100%;
+      flex-basis: 225px;
     }
   }
 

@@ -43,7 +43,10 @@ export default {
           song: song
         })
       }).catch(err => {
-        alert(err.response.data)
+        if (this.author === 'testuser') {
+          alert('testuser has been reset, refreshing browser')
+          window.location = '/testuser/playlists'
+        }
         switch (err.response.data) {
           case 'Please login again or refresh the page':
             this.$store.commit('logUserOut') // remove cradentials
